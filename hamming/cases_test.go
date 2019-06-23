@@ -64,4 +64,10 @@ var testCases = []struct {
 		0,
 		true,
 	},
+	{ // handle strings with the same rune length but different byte length
+		"猫",
+		"DNA",
+		0,
+		true,
+	},
 }
