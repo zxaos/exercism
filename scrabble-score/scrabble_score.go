@@ -1,7 +1,11 @@
 // Package scrabble provides utilities for working with the game of scrabble.
 package scrabble
 
-import "strings"
+import (
+	"errors"
+	"strings"
+	"unicode/utf8"
+)
 
 // Score performs basic scrabble scoring given a word.
 func Score(word string) int {
@@ -16,17 +20,17 @@ func Score(word string) int {
 // ScoreSpecial performs modified scoring with per letter and total multipliers.
 // It should be used when scoring words with blanks, or words placed over
 // double or triple letter or word score tiles.
-func ScoreSpecial(word string, letterMultipliers []int, totalMultiplier int) int {
+func ScoreSpecial(word string, letterMultipliers []int, totalMultiplier int) (int, error) {
 	var score int
 	target := strings.ToLower(word)
-	wordRunes := []rune(word)
-	if len(letterMultipliers) != len(wordRunes) {
-		letterMultipliers = make([]int, len(wordRunes))
+	if len(letterMultipliers) != utf8.RuneCountInString(word) {
+		return 0, errors.New("Invalid per-letter multipliers")
 	}
+
 	for i, letter := range target {
 		score += (scoreValues[letter] * letterMultipliers[i])
 	}
-	return (score * totalMultiplier)
+	return (score * totalMultiplier), nil
 }
 
 // There's lots of ways to do this - but this is just about the simplest
