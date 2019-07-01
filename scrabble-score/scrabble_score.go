@@ -24,7 +24,7 @@ func ScoreSpecial(word string, letterMultipliers []int, totalMultiplier int) (in
 	var score int
 	target := strings.ToLower(word)
 	if len(letterMultipliers) != utf8.RuneCountInString(word) {
-		return 0, errors.New("Invalid per-letter multipliers")
+		return 0, errors.New("invalid per-letter multipliers")
 	}
 
 	for i, letter := range target {
